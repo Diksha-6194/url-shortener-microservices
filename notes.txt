@@ -1,0 +1,42 @@
+-mongo is running on local server where as redis is running on docker 
+- host "local host " ki jagah ip ya original website ka url aaega jab deploy karenge 
+eg aws ec2 ke containers ek ip denge vo yaha lake paste kar denge
+
+
+async and iify wrapup on connect redis. and connectMongodb -- as we want server start hone se pehlee he database setup ho jae
+
+
+
+explore pm2
+
+PM2 — Quick Interview Notes
+- PM2 is a process manager for Node.js that helps run and manage applications in production.
+- Instead of simply running node server.js, PM2 manages the Node.js process and keeps it running.
+- Automatic Restart: If the application crashes, PM2 can automatically restart it.
+- Monitoring & Logs: PM2 lets us monitor CPU/memory usage and easily view application logs.
+- Cluster Mode: PM2 can run multiple instances of the same Node.js application to utilize multiple CPU cores.
+- Scaling: Multiple PM2 instances allow process-level scaling on the same server; it is not the same as scaling across multiple servers.
+- Zero/Low-Downtime Reload: PM2 can reload application instances during deployment while reducing service interruption.
+- Startup Persistence: PM2 can automatically bring applications back after a server restart.
+Memory trick:  
+PM2 = Run + Restart + Monitor + Log + Scale + Reload + Recover
+
+npm install -g pm2
+pm2 start server.js
+
+use nginx reverse and forward proxy nginx.conf. upstream 
+
+NGINX — Main Features
+- Handles thousands of concurrent requests efficiently.
+- Caches HTTP responses to improve performance and reduce server load.
+- Acts as a Reverse Proxy — forwards client requests to backend servers.
+- Acts as a Load Balancer — distributes traffic across multiple backend servers.
+- Can act as an API Gateway — manages and routes API requests.
+- Serves static files such as images, videos, CSS, JavaScript, etc.
+- Handles SSL/TLS certificates and HTTPS connections.
+
+
+pm2 delete server
+pm2 start server.js --name urlshortner -i 5
+pm2 status
+pm2 logs urlshortner
