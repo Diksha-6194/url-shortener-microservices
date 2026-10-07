@@ -7,7 +7,7 @@ const getNextSequence = async () => {
     const counter = await Counter.findOneAndUpdate(
         {name: "url_counter"},
         {$inc: {value: 1}},
-        {new: true, upsert: true}
+        {new: true, upsert: true} //update+insert 
     )
     return counter.value;
 }

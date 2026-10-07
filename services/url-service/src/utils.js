@@ -1,0 +1,12 @@
+// Base62 encoding for generating short codes
+const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+exports.encode = (num) => {
+    let result = "";
+
+    while (num > 0) {
+        result = chars[num % 62] + result;
+        num = Math.floor(num / 62);
+    }
+    return result || "0"; // return "0" for num=0
+};

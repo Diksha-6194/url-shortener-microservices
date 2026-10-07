@@ -1,0 +1,85 @@
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=urlshortner
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # URL Service
+  url-service:
+    build:
+      context: ./services/url-service
+    container_name: url-service
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGO_URI=mongodb://mongodb:27017/urlshortner
+      - BASE_URL=http://localhost:8080
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # Redirect Service
+  redirect-service:
+    build:
+      context: ./services/redirect-service
+    container_name: redirect-service
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - MONGO_URI=mongodb://mongodb:27017/urlshortner
+      - ANALYTICS_SERVICE_URL=http://analytics-service:3003
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      analytics-service:
+        condition: service_started
+
+  # Analytics Service
+  analytics-service:
+    build:
+      context: ./services/analytics-service
+    container_name: analytics-service
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - MONGO_URI=mongodb://mongodb:27017/urlshortner
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - URL_SERVICE_URL=http://url-service:3001
+      - REDIRECT_SERVICE_URL=http://redirect-service:3002
+      - ANALYTICS_SERVICE_URL=http://analytics-service:3003
+    depends_on:
+      url-service:
+        condition: service_started
+      redirect-service:
+        condition: service_started
+      analytics-service:
+        condition: service_started
+
+volumes:
+  mongodb_data:

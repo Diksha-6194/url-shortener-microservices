@@ -40,3 +40,74 @@ pm2 delete server
 pm2 start server.js --name urlshortner -i 5
 pm2 status
 pm2 logs urlshortner
+
+
+
+
+
+
+chnages in ngnix from 127.01.-- to docker. as diff machine can have different local ip so we will use docker ip which is common for allow
+
+
+
+load balancer -  nginx
+application server -pm2 
+
+ngnix 8080 is the entry point that distributes traffic to different servers like 8081 8082 8083 8084 8085 in the nginx files
+
+0.0.0.0 allows node to accept connection from 
+
+
+server build karte hue server ki helth check karne ka point 
+
+apache bench -- for testing the load of the server tells how many req a server can handel mer min
+this is very important this should be implemented in my project
+
+Apache Bench helps you measure:
+Requests per second: How many HTTP requests your application handles per second.
+
+Response time: How long the server takes to respond.
+
+Concurrency: How many requests are being processed simultaneously by the benchmark.
+
+Failed requests: How many requests did not complete successfully.
+
+pm2 list
+pm2 monit
+pm2 restart all --update-env 
+
+TO RUN NGINX IN docker
+docker run --name url-nginx \
+  -d \
+  -p 8080:8080 \
+  -v "$PWD/nginx.conf:/etc/nginx/nginx.conf:ro" \
+  nginx:alpine 
+
+PORT=8085 pm2 start server.js --name server-8085
+
+TO INSTALL APACHE WORK BENCH IN MAC
+brew install httpd
+
+ab -n 1000 -c 10 http://localhost:8080/health
+
+Option
+
+	
+ab -- Runs Apache Bench
+
+-n 1000-Sends 1,000 total requests
+
+-c 10 ----Sends up to 10 concurrent requests
+
+URL---The endpoint being tested
+
+
+ green field-project from scratch
+
+ brown field-from mid type
+
+ url shortner is brown 
+
+
+ implementation plan division and files folder tech stack folder setup 
+
